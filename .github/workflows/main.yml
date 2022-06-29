@@ -25,6 +25,16 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v3.0.0
     
+      - uses: synopsys-sig-community/synopsys-github-templates/coverity@<version>
+        with:
+          coverity-url: ${{ secrets.COVERITY_URL }}
+          coverity-user: ${{ secrets.COVERITY_USER }}
+          coverity-passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
+          coverity-project-name: ${{ github.event.repository.name }}
+          coverity-checker-options: --webapp-security --all
+          create-stream-and-project: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Black Duck (Full scan)
         uses: synopsys-sig/detect-action@main
         with:
