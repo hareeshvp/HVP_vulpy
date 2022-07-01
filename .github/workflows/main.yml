@@ -27,8 +27,8 @@ jobs:
         
       - name: Setup Python
         uses: actions/setup-python@v3.1.2
-        with:
-          python-version: 3.9.13    
+        #with:
+        #  python-version: 3.9.13    
     
       - name: Python Pip Install
         uses: logikal-code/pip-install@v1.0.0
