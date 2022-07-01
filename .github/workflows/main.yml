@@ -32,8 +32,8 @@ jobs:
     
       - name: Python Pip Install
         uses: logikal-code/pip-install@v1.0.0
-        with:
-          requirements: requirements.txt
+        #with:
+        #  requirements: requirements.txt
           
       - name: Black Duck (Full scan)
         uses: synopsys-sig/detect-action@main
