@@ -1,5 +1,4 @@
 # Synopsys Coverity and Black Duck on a self-hosted runner 
-
 name: Synopsys AppSec
 
 on:
@@ -18,7 +17,8 @@ jobs:
     env:
       COV_URL: ${{ secrets.COVERITY_URL }}
       COV_USER: ${{ secrets.COVERITY_USER }}
-      COVERITY_PASSPHRASE: ${{ secrets.COVERITY_PASSPHRASE }}      
+      COVERITY_PASSPHRASE: ${{ secrets.COVERITY_PASSPHRASE }}
+      
     steps:
       - uses: actions/checkout@v3
 
