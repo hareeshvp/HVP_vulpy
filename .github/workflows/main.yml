@@ -19,7 +19,7 @@ jobs:
       COV_URL: ${{ secrets.COVERITY_URL }}
       COV_USER: ${{ secrets.COVERITY_USER }}
       COVERITY_PASSPHRASE: ${{ secrets.COVERITY_PASSPHRASE }}
-      COVERITY_PROJECT: HVP_vulpy
+      COVERITY_PROJECT: "HVP_vulpy"
       CHECKERS: --webapp-security --all
       
     steps:
