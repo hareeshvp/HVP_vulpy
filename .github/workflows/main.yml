@@ -34,9 +34,11 @@ jobs:
         with:
           python-version: '3.x'
           
-      - name: Setup yq environment
-        uses: shiipou/setup-yq-action@v2.0.2
-    
+      - name: Chocolatey Action
+        uses: crazy-max/ghaction-chocolatey@v2.0.0
+        with:
+            args: install jq
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
