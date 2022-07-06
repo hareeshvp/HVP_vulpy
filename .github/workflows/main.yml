@@ -45,18 +45,17 @@ jobs:
           cov-commit-defects --dir idir --ticker-mode none --url ${{ secrets.COVERITY_URL }} --on-new-cert trust --stream HVP_vulpy
           
       - name: Coverity Security Gate
+        shell: bash
         run: |
           curl -kfLsS --user ${{ secrets.COVERITY_USER }}:${{ secrets.COVERITY_PASSPHRASE }} ${{ secrets.COVERITY_URL }}/api/viewContents/issues/v1/High%20Impact%20Outstanding?projectId=HVP_vulpy > security-gate-results.json
-          if ( $(type security-gate-results.json | jq .viewContentsV1.totalRows) -ne 0 )
-          {
+          if [ $(cat security-gate-results.json | jq .viewContentsV1.totalRows) -ne 0 ]; then
             echo Security gate found policy violations
-            type security-gate-results.json | jq .viewContentsV1.rows
+            cat security-gate-results.json | jq .viewContentsV1.rows
             echo "SECURITY_GATE_STATUS=failure" >> $GITHUB_ENV
-          }
           else
-          {
             echo "SECURITY_GATE_STATUS=success" >> $GITHUB_ENV
-          }
+          fi
+
           
       - name: "Coverity Policy Check"
         uses: ouzi-dev/commit-status-updater@v1.1.0
