@@ -47,13 +47,16 @@ jobs:
       - name: Coverity Security Gate
         run: |
           curl -kfLsS --user ${{ secrets.COVERITY_USER }}:${{ secrets.COVERITY_PASSPHRASE }} ${{ secrets.COVERITY_URL }}/api/viewContents/issues/v1/High%20Impact%20Outstanding?projectId=HVP_vulpy > security-gate-results.json
-          if ( $(type security-gate-results.json | jq .viewContentsV1.totalRows) -ne 0 ); then
+          if ( $(type security-gate-results.json | jq .viewContentsV1.totalRows) -ne 0 )
+          {
             echo Security gate found policy violations
             type security-gate-results.json | jq .viewContentsV1.rows
             echo "SECURITY_GATE_STATUS=failure" >> $GITHUB_ENV
+          }
           else
+          {
             echo "SECURITY_GATE_STATUS=success" >> $GITHUB_ENV
-          fi
+          }
           
           - uses: ouzi-dev/commit-status-updater@v1.1.0
           with:
