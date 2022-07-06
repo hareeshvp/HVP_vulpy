@@ -18,6 +18,7 @@ jobs:
       COV_URL: ${{ secrets.COVERITY_URL }}
       COV_USER: ${{ secrets.COVERITY_USER }}
       COVERITY_PASSPHRASE: ${{ secrets.COVERITY_PASSPHRASE }}
+      SECURITY_GATE_VIEW: High Impact Outstanding
       
     steps:
       - uses: actions/checkout@v3
@@ -31,7 +32,10 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.x'    
+          python-version: '3.x'
+          
+      - name: Setup jq environment
+        uses: urgn/setup-jq-action@v3.0.2
     
       - name: Install dependencies
         run: |
@@ -43,6 +47,23 @@ jobs:
           cov-capture --dir idir --project-dir .
           cov-analyze --dir idir --ticker-mode none --webapp-security --all
           cov-commit-defects --dir idir --ticker-mode none --url ${{ secrets.COVERITY_URL }} --on-new-cert trust --stream HVP_vulpy
+          
+      - name: Coverity Security Gate
+        run: |
+          COVERITY_VIEW_ESCAPED=`jq -rn --arg x "$SECURITY_GATE_VIEW" '$x|@uri'`
+          curl -kfLsS --user $COV_USER:$COVERITY_PASSPHRASE $COVERITY_URL/api/viewContents/issues/v1/$COVERITY_VIEW_ESCAPED?projectId=$COVERITY_STREAM_NAME > security-gate-results.json
+          if [ $(cat security-gate-results.json | jq .viewContentsV1.totalRows) -ne 0 ]; then
+            echo Security gate found policy violations
+            cat security-gate-results.json | jq .viewContentsV1.rows
+            echo "SECURITY_GATE_STATUS=failure" >> $GITHUB_ENV
+          else
+            echo "SECURITY_GATE_STATUS=success" >> $GITHUB_ENV
+          fi
+          
+          - uses: ouzi-dev/commit-status-updater@v1.1.0
+          with:
+            name: "Coverity Policy Check"
+            status: "${{ env.SECURITY_GATE_STATUS }}"
           
       - name: Black Duck SCA Scan
         uses: synopsys-sig/detect-action@main
