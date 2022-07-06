@@ -34,8 +34,8 @@ jobs:
         with:
           python-version: '3.x'
           
-      - name: Setup jq environment
-        uses: urgn/setup-jq-action@v3.0.2
+      - name: Setup yq environment
+        uses: shiipou/setup-yq-action@v2.0.2
     
       - name: Install dependencies
         run: |
@@ -51,7 +51,7 @@ jobs:
       - name: Coverity Security Gate
         run: |
           COVERITY_VIEW_ESCAPED=`jq -rn --arg x "$SECURITY_GATE_VIEW" '$x|@uri'`
-          curl -kfLsS --user $COV_USER:$COVERITY_PASSPHRASE $COVERITY_URL/api/viewContents/issues/v1/$COVERITY_VIEW_ESCAPED?projectId=$COVERITY_STREAM_NAME > security-gate-results.json
+          curl -kfLsS --user $COV_USER:$COVERITY_PASSPHRASE $COVERITY_URL/api/viewContents/issues/v1/$COVERITY_VIEW_ESCAPED?projectId=HVP_vulpy > security-gate-results.json
           if [ $(cat security-gate-results.json | jq .viewContentsV1.totalRows) -ne 0 ]; then
             echo Security gate found policy violations
             cat security-gate-results.json | jq .viewContentsV1.rows
