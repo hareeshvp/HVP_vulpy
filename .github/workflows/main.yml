@@ -58,9 +58,9 @@ jobs:
             echo "SECURITY_GATE_STATUS=success" >> $GITHUB_ENV
           }
           
-          - uses: ouzi-dev/commit-status-updater@v1.1.0
-          with:
-            name: "Coverity Policy Check"
+      - name: "Coverity Policy Check"
+        uses: ouzi-dev/commit-status-updater@v1.1.0
+        with:
             status: "${{ env.SECURITY_GATE_STATUS }}"
           
       - name: Black Duck SCA Scan
