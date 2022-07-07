@@ -18,6 +18,8 @@ jobs:
       COV_URL: ${{ secrets.COVERITY_URL }}
       COV_USER: ${{ secrets.COVERITY_USER }}
       COVERITY_PASSPHRASE: ${{ secrets.COVERITY_PASSPHRASE }}
+      PROJECT_NAME: ${GITHUB_REPOSITORY#*/}
+      VERSION_NAME: ${GITHUB_REF_NAME#*/}
       
     steps:
       - uses: actions/checkout@v3
@@ -61,6 +63,12 @@ jobs:
       
       - name: Black Duck SCA Scan
         run: |
+          type $PROJECT_NAME
+          type $VERSION_NAME
+          
+          type PROJECT_NAME
+          type VERSION_NAME
+          
           powershell "[Net.ServicePointManager]::SecurityProtocol = 'tls12'; irm https://detect.synopsys.com/detect7.ps1?$(Get-Random) | iex; detect" --blackduck.url=${{ secrets.BLACKDUCK_URL }} --blackduck.api.token=${{ secrets.BLACKDUCK_API_TOKEN }} --blackduck.trust.cert=true --detect.policy.check.fail.on.severities=BLOCKER --detect.project.name=${{GITHUB_REPOSITORY#*/}} --detect.project.version.name=${{GITHUB_REF_NAME#*/}}
 
 #      - name: Black Duck SCA Scan
