@@ -46,8 +46,7 @@ jobs:
           
       - name: Coverity Security Gate
         run: |
-          curl.exe -v --user hareesh:Coverity@123 --output security-gate-results.json ${{ secrets.COVERITY_URL }}/api/viewContents/issues/v1/High%20Impact%20Outstanding?projectId=HVP_vulpy
-
+          curl.exe -u ${{ secrets.COVERITY_USER }}:${{ secrets.COVERITY_PASSPHRASE }} -o security-gate-results.json ${{ secrets.COVERITY_URL }}/api/viewContents/issues/v1/High%20Impact%20Outstanding?projectId=HVP_vulpy
           if ($(type security-gate-results.json | jq .viewContentsV1.totalRows) -ne 0 )
           {
             echo Security gate found policy violations
