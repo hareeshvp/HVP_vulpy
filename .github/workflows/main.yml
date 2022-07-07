@@ -63,8 +63,8 @@ jobs:
       
       - name: Black Duck SCA Scan
         run: |
-          echo $PROJECT_NAME
-          echo $VERSION_NAME
+          echo PROJECT_NAME
+          echo VERSION_NAME
 #          type $PROJECT_NAME
 #          type $VERSION_NAME 
 
