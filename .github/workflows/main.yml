@@ -58,14 +58,18 @@ jobs:
           {
             echo No High Impact issues policy violations found
           }
-          
+      
       - name: Black Duck SCA Scan
-        uses: synopsys-sig/detect-action@main
-        env:
-          DETECT_POLICY_CHECK_FAIL_ON_SEVERITIES: BLOCKER,CRITICAL 
-        with:
-          scan-mode: INTELLIGENT
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          detect-version: 7.12.0
-          blackduck-url: ${{ secrets.BLACKDUCK_URL }}
-          blackduck-api-token: ${{ secrets.BLACKDUCK_API_TOKEN }}
+        run: |
+          powershell "[Net.ServicePointManager]::SecurityProtocol = 'tls12'; irm https://detect.synopsys.com/detect7.ps1?$(Get-Random) | iex; detect" --blackduck.url=${{ secrets.BLACKDUCK_URL }} --blackduck.api.token=${{ secrets.BLACKDUCK_API_TOKEN }} --blackduck.trust.cert=true --detect.policy.check.fail.on.severities=BLOCKER,CRITICAL --detect.project.name=${GITHUB_REPOSITORY#*/} --detect.project.version.name=${GITHUB_REF_NAME#*/}
+
+#      - name: Black Duck SCA Scan
+#        uses: synopsys-sig/detect-action@main
+#        env:
+#          DETECT_POLICY_CHECK_FAIL_ON_SEVERITIES: BLOCKER,CRITICAL 
+#        with:
+#          scan-mode: INTELLIGENT
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          detect-version: 7.12.0
+#          blackduck-url: ${{ secrets.BLACKDUCK_URL }}
+#          blackduck-api-token: ${{ secrets.BLACKDUCK_API_TOKEN }}
