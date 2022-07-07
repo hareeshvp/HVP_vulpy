@@ -46,7 +46,7 @@ jobs:
           
       - name: Coverity Security Gate
         run: |
-          curl ${{ secrets.COVERITY_URL }}/api/viewContents/issues/v1/High%20Impact%20Outstanding?projectId=HVP_vulpy -u ${{ secrets.COVERITY_USER }}:${{ secrets.COVERITY_PASSPHRASE }} > security-gate-results.json
+          curl ${{ secrets.COVERITY_URL }}/api/viewContents/issues/v1/High%20Impact%20Outstanding?projectId=HVP_vulpy "-u" ${{ secrets.COVERITY_USER }}:${{ secrets.COVERITY_PASSPHRASE }} > security-gate-results.json
 
           if ($(type security-gate-results.json | jq .viewContentsV1.totalRows) -ne 0 )
           {
