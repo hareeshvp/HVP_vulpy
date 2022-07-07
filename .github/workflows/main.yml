@@ -51,18 +51,12 @@ jobs:
           {
             echo Security gate found policy violations
             type security-gate-results.json | jq .viewContentsV1.rows
-            echo "SECURITY_GATE_STATUS=failure" >> $GITHUB_ENV
+            exit 1;
           }
           else
           {
             echo "SECURITY_GATE_STATUS=success" >> $GITHUB_ENV
           }
-
-          
-      - name: "Coverity Policy Check"
-        uses: ouzi-dev/commit-status-updater@v1.1.0
-        with:
-            status: "${{ env.SECURITY_GATE_STATUS }}"
           
       - name: Black Duck SCA Scan
         uses: synopsys-sig/detect-action@main
