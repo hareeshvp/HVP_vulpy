@@ -63,7 +63,18 @@ jobs:
       
       - name: Black Duck SCA Scan
         run: |
-          powershell "[Net.ServicePointManager]::SecurityProtocol = 'tls12'; irm https://detect.synopsys.com/detect7.ps1?$(Get-Random) | iex; detect" --blackduck.url=${{ secrets.BLACKDUCK_URL }} --blackduck.api.token=${{ secrets.BLACKDUCK_API_TOKEN }} --blackduck.trust.cert=true --detect.policy.check.fail.on.severities=BLOCKER --detect.project.name=HVP_vulpy --detect.project.version.name=main
+          retval = powershell "[Net.ServicePointManager]::SecurityProtocol = 'tls12'; irm https://detect.synopsys.com/detect7.ps1?$(Get-Random) | iex; detect" --blackduck.url=${{ secrets.BLACKDUCK_URL }} --blackduck.api.token=${{ secrets.BLACKDUCK_API_TOKEN }} --blackduck.trust.cert=true --detect.policy.check.fail.on.severities=BLOCKER --detect.project.name=HVP_vulpy --detect.project.version.name=main
+          if ($(retval) -ne 0 )
+          {
+            echo Security gate found policy violations
+            ## type security-gate-results.json | jq .viewContentsV1.rows
+            ## You may mark the build as failure
+            ##exit 1;
+          }
+          else
+          {
+            echo No High Impact issues policy violations found
+          }
 
 #      - name: Black Duck SCA Scan
 #        uses: synopsys-sig/detect-action@main
