@@ -69,7 +69,7 @@ jobs:
           type PROJECT_NAME
           type VERSION_NAME
           
-          powershell "[Net.ServicePointManager]::SecurityProtocol = 'tls12'; irm https://detect.synopsys.com/detect7.ps1?$(Get-Random) | iex; detect" --blackduck.url=${{ secrets.BLACKDUCK_URL }} --blackduck.api.token=${{ secrets.BLACKDUCK_API_TOKEN }} --blackduck.trust.cert=true --detect.policy.check.fail.on.severities=BLOCKER --detect.project.name=${{GITHUB_REPOSITORY#*/}} --detect.project.version.name=${{GITHUB_REF_NAME#*/}}
+          powershell "[Net.ServicePointManager]::SecurityProtocol = 'tls12'; irm https://detect.synopsys.com/detect7.ps1?$(Get-Random) | iex; detect" --blackduck.url=${{ secrets.BLACKDUCK_URL }} --blackduck.api.token=${{ secrets.BLACKDUCK_API_TOKEN }} --blackduck.trust.cert=true --detect.policy.check.fail.on.severities=BLOCKER --detect.project.name=$PROJECT_NAME --detect.project.version.name=$VERSION_NAME
 
 #      - name: Black Duck SCA Scan
 #        uses: synopsys-sig/detect-action@main
