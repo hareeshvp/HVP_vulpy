@@ -52,12 +52,13 @@ jobs:
             echo Security gate found policy violations
             ## type security-gate-results.json | jq .viewContentsV1.rows
             ## You may mark the build as failure
-            ## exit 1;
+            exit 1;
           }
           else
           {
             echo No High Impact issues policy violations found
           }
+          allow_failure: true
           
       - name: Black Duck SCA Scan
         uses: synopsys-sig/detect-action@main
